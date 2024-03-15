@@ -36,8 +36,11 @@ app.get("/home", (_, res) => {
   Home.show_home(res);
 });
 
-app.get("/available", (_, res) => {
+app.get("/available", async (_, res) => {
   BooksStatus.show_all_books_status(res);
+
+  const result = await BooksStatus.find({})
+  res.json(result)
 });
 
 app.get("/books", (_, res) => {
@@ -46,8 +49,9 @@ app.get("/books", (_, res) => {
     .catch((_) => res.send("No books found"));
 });
 
-app.get("/authors", (_, res) => {
-  Authors.show_all_authors(res);
+app.get("/authors", async (_, res) => {
+  const result = await Authors.find({}).populate().select("name lifespan")
+  res.json(result)
 });
 
 app.get("/book_dtls", (req, res) => {
